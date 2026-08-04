@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grades Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #6c72e6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #f4f6fa;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 900px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .period-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .tab-btn {
+      background-color: #e2e8f0;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a5568;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background-color: #4c4cd8;
+      color: white;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .components-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 12px;
+    }
+
+    .weight-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #ebf8ff;
+      color: #3182ce;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .input-group label {
+      font-size: 11px;
+      color: #718096;
+    }
+
+    .input-group input {
+      width: 50px;
+      padding: 4px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .component-footer {
+      margin-top: 15px;
+      padding-top: 8px;
+      border-top: 1px dashed #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .component-footer span {
+      font-size: 10px;
+      color: #718096;
+    }
+
+    .component-footer .grade-value {
+      font-size: 12px;
+      font-weight: 700;
+      color: #319795;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .summary-card.dark {
+      background: #10172a;
+      color: white;
+    }
+
+    .summary-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #718096;
+      margin-bottom: 8px;
+    }
+
+    .summary-card.dark .summary-title {
+      color: #94a3b8;
+    }
+
+    .summary-score {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2b6cb0;
+    }
+
+    .summary-card.dark .summary-score {
+      font-size: 32px;
+      color: white;
+      margin: 10px 0;
+    }
+
+    .input-large {
+      width: 100%;
+      padding: 8px;
+      border: 2px dashed #319795;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 5px;
+      outline: none;
+    }
+
+    .overall-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 11px;
+    }
+
+    .overall-row .label {
+      color: #718096;
+    }
+
+    .overall-row .val {
+      font-weight: 700;
+      color: #2b6cb0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Grades Portal</h1>
+    </header>
+
+    <div class="period-tabs">
+      <button class="tab-btn active">Prelim Period</button>
+      <button class="tab-btn">Midterm Period</button>
+      <button class="tab-btn">Finals Period</button>
+    </div>
+
+    <div class="main-grid">
+      <!-- Left side input components -->
+      <div class="components-grid">
+        
+        <!-- Attendance -->
+        <div class="card">
+          <div class="card-title">Attendance</div>
+          <div class="weight-badge">10%</div>
+          <div class="input-group">
+            <label>Week 1</label>
+            <input type="number" class="att-input" min="0" max="100">
+          </div>
+          <div class="input-group">
+            <label>Week 2</label>
+            <input type="number" class="att-input" min="0" max="100">
+          </div>
+          <div class="input-group">
+            <label>Week 3</label>
+            <input type="number" class="att-input" min="0" max="100">
+          </div>
+          <div class="component-footer">
+            <span>Component Grade</span>
+            <span class="grade-value" id="att-total">0.00</span>
+          </div>
+        </div>
+
+        <!-- Recitation -->
+        <div class="card">
+          <div class="card-title">Recitation</div>
+          <div class="weight-badge">10%</div>
+          <div class="input-group">
+            <label>Session 1</label>
+            <input type="number" class="rec-input" min="0" max="100">
+          </div>
+          <div class="input-group">
+            <label>Session 2</label>
+            <input type="number" class="rec-input" min="0" max="100">
+          </div>
+          <div class="input-group">
+            <label>Session 3</label>
+            <input type="number" class="rec-input" min="0" max="100">
+          </div>
+          <div class="component-footer">
+            <span>Component Grade</span>
+            <span class="grade-value" id="rec-total">0.00</span>
+          </div>
+        </div>
+
+        <!-- Quizzes -->
+        <div class="card">
+          <div class="card-title">Quizzes</div>
+          <div class="weight-badge">25%</div>
+          <div class="input-group">
+            <label>Quiz 1</label>
+            <input type="number" class="quiz-input" min="0" max="100">
+          </div>
+          <div class="input-group">
+            <label>Quiz 2</label>
+            <input type="number" class="quiz-input" min="0" max="100">
+          </div>
+          <div class="component-footer">
+            <span>Component Grade</span>
+            <span class="grade-value" id="quiz-total">0.00</span>
+          </div>
+        </div>
+
+        <!-- Project -->
+        <div class="card">
+          <div class="card-title">Project</div>
+          <div class="weight-badge">25%</div>
+          <div class="input-group">
+            <label>Final Project</label>
+            <input type="number" class="proj-input" min="0" max="100">
+          </div>
+          <div class="component-footer">
+            <span>Component Grade</span>
+            <span class="grade-value" id="proj-total">0.00</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right side summary section -->
+      <div class="sidebar">
+        <div class="summary-card">
+          <div class="summary-title">TOTAL CLASS STANDING</div>
+          <div class="summary-score" id="class-standing">0.00</div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-title">MAJOR EXAM SCORE</div>
+          <input type="number" id="major-exam" class="input-large" placeholder="Enter Score" min="0" max="100">
+        </div>
+
+        <div class="summary-card dark">
+          <div class="summary-title">PRELIM GRADE</div>
+          <div class="summary-score" id="term-grade">0.00</div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-title">OVERALL PROGRESS</div>
+          <div class="overall-row">
+            <span class="label">Prelim Grade:</span>
+            <span class="val" id="prelim-display">0.00</span>
+          </div>
+          <div class="overall-row">
+            <span class="label">Midterm Grade:</span>
+            <span class="val" id="midterm-display">0.00</span>
+          </div>
+          <div class="overall-row" style="border-top: 1px dashed #e2e8f0; padding-top: 6px; margin-top: 4px;">
+            <span class="label" style="font-weight: 700;">FINAL GRADE</span>
+            <span class="val" id="final-display">0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      att: { weights: 0.10, inputs: document.querySelectorAll('.att-input') },
+      rec: { weights: 0.10, inputs: document.querySelectorAll('.rec-input') },
+      quiz: { weights: 0.25, inputs: document.querySelectorAll('.quiz-input') },
+      proj: { weights: 0.25, inputs: document.querySelectorAll('.proj-input') },
+      major: document.getElementById('major-exam')
+    };
+
+    function calculateTerm() {
+      // Calculate Attendance Total (Average * Weight)
+      const attData = Array.from(data.att.inputs).map(i => parseFloat(i.value) || 0);
+      const attAvg = attData.reduce((a, b) => a + b, 0) / attData.length;
+      const attTotal = attAvg * data.att.weights;
+      document.getElementById('att-total').innerText = attTotal.toFixed(2);
+
+      // Calculate Recitation Total (Average * Weight)
+      const recData = Array.from(data.rec.inputs).map(i => parseFloat(i.value) || 0);
+      const recAvg = recData.reduce((a, b) => a + b, 0) / recData.length;
+      const recTotal = recAvg * data.rec.weights;
+      document.getElementById('rec-total').innerText = recTotal.toFixed(2);
+
+      // Calculate Quizzes Total (Average * Weight)
+      const quizData = Array.from(data.quiz.inputs).map(i => parseFloat(i.value) || 0);
+      const quizAvg = quizData.reduce((a, b) => a + b, 0) / quizData.length;
+      const quizTotal = quizAvg * data.quiz.weights;
+      document.getElementById('quiz-total').innerText = quizTotal.toFixed(2);
+
+      // Calculate Project Total (Average * Weight)
+      const projData = Array.from(data.proj.inputs).map(i => parseFloat(i.value) || 0);
+      const projAvg = projData.reduce((a, b) => a + b, 0) / projData.length;
+      const projTotal = projAvg * data.proj.weights;
+      document.getElementById('proj-total').innerText = projTotal.toFixed(2);
+
+      // Calculate Class Standing (Sum of weighted components)
+      const classStanding = attTotal + recTotal + quizTotal + projTotal;
+      document.getElementById('class-standing').innerText = classStanding.toFixed(2);
+
+      // Formula derived from original behavior: (Class Standing * 2 + Major Exam) / 3
+      const majorVal = parseFloat(data.major.value) || 0;
+      if (data.major) {
+        let termGrade = ((classStanding * 2) + majorVal) / 3;
+        document.getElementById('term-grade').innerText = termGrade.toFixed(2);
+        document.getElementById('prelim-display').innerText = termGrade.toFixed(2);
+      }
+    }
+
+    // Attach event listeners to all input fields
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', calculateTerm);
+    });
+  </script>
+</body>
+</html>
